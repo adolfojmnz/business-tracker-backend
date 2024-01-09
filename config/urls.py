@@ -6,4 +6,5 @@ urlpatterns = [
     path("api/", include("tokens.routers")),
     path("api/", include("accounts.api.routers")),
     path("api/v1/", include("products.api.v1.routers")),
+    path("api/v1/", include("customers.api.v1.routers")),
 ]
