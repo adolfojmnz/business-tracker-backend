@@ -21,7 +21,7 @@ class Order(models.Model):
     datetime = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return f"{self.customer}'s order"
+        return f"ID: {self.id}: {self.customer}'s order"
 
 
 class OrderItem(models.Model):
@@ -39,7 +39,8 @@ class OrderItem(models.Model):
             "name": self.product.name,
             "cost": self.product.cost,
             "price": self.product.price,
-            "stock": f"{self.product.stock} {self.product.unit.symbol}"
+            "stock": self.product.stock,
+            "unit": self.product.unit.symbol,
         }
         self.product_attributes = attributes
 
