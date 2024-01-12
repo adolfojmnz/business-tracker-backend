@@ -15,12 +15,17 @@ urlpatterns = [
         name="product-details",
     ),
     path(
+        "products/<int:pk>/analitics",
+        views.ProductAnaliticsView.as_view(),
+        name="product-analitics",
+    ),
+    path(
         "categories",
         views.CategoryListView.as_view(),
         name="category-list",
     ),
     path(
-        "category/<int:pk>",
+        "categories/<int:pk>",
         views.CategoryDetailsView.as_view(),
         name="category-details",
     ),
