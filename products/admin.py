@@ -6,6 +6,7 @@ from products.models import Product, Unit, Category
 @admin.register(Product)
 class ProductAdmin(admin.ModelAdmin):
     list_display = [
+        "id",
         "name",
         "cost",
         "price",
@@ -20,6 +21,7 @@ class ProductAdmin(admin.ModelAdmin):
 @admin.register(Unit)
 class UnitAdmin(admin.ModelAdmin):
     list_display = [
+        "id",
         "name",
         "symbol",
         "description",
@@ -31,6 +33,7 @@ class UnitAdmin(admin.ModelAdmin):
 @admin.register(Category)
 class CategoryAdmin(admin.ModelAdmin):
     list_display = [
+        "id",
         "name",
         "description",
         "added_on",
