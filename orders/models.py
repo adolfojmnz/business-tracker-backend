@@ -29,10 +29,16 @@ class OrderItem(models.Model):
     order = models.ForeignKey(Order, on_delete=models.PROTECT)
     product_attributes = models.JSONField(blank=True)
     quantity = models.IntegerField(default=1)
+    revenue = models.FloatField(blank=True)
     subtotal = models.FloatField(blank=True)
 
+    def calculate_revenue(self):
+        self.revenue = round(
+            (self.product.price - self.product.cost) * self.quantity, 2
+        )
+
     def calculate_subtotal(self):
-        self.subtotal = self.quantity * self.product.price
+        self.subtotal = round(self.quantity * self.product.price, 2)
 
     def generate_product_attributes(self):
         attributes = {
@@ -45,6 +51,7 @@ class OrderItem(models.Model):
         self.product_attributes = attributes
 
     def save(self, *args, **kwargs):
+        self.calculate_revenue()
         self.calculate_subtotal()
         self.generate_product_attributes()
         return super().save(*args, **kwargs)
