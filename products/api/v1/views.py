@@ -3,13 +3,18 @@ from rest_framework.permissions import (
     IsAdminUser,
     IsAuthenticated,
 )
-from rest_framework.generics import ListCreateAPIView, RetrieveUpdateAPIView
+from rest_framework.generics import (
+    RetrieveAPIView,
+    ListCreateAPIView,
+    RetrieveUpdateAPIView,
+)
 
 from products.models import Product, Category, Unit
 from products.api.v1.serializers import (
+    UnitSerializer,
     ProductSerializer,
     CategorySerializer,
-    UnitSerializer,
+    ProductAnaliticsSerializer,
 )
 
 from products.api.v1.filters import (
@@ -40,6 +45,12 @@ class ProductDetailsView(RetrieveUpdateAPIView, PermissionsMixin):
     serializer_class = ProductSerializer
     filter_backends = [FilterBackend]
     filterset_class = ProductFilterSet
+
+
+class ProductAnaliticsView(RetrieveAPIView, PermissionsMixin):
+    model = Product
+    queryset = model.objects.all()
+    serializer_class = ProductAnaliticsSerializer
 
 
 class CategoryListView(ListCreateAPIView, PermissionsMixin):
