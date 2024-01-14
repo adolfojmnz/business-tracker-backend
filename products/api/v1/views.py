@@ -14,7 +14,8 @@ from products.api.v1.serializers import (
     UnitSerializer,
     ProductSerializer,
     CategorySerializer,
-    ProductAnaliticsSerializer,
+    ProductAnalyticsSerializer,
+    CategoryAnalyticsSerializer,
 )
 
 from products.api.v1.filters import (
@@ -47,10 +48,10 @@ class ProductDetailsView(RetrieveUpdateAPIView, PermissionsMixin):
     filterset_class = ProductFilterSet
 
 
-class ProductAnaliticsView(RetrieveAPIView, PermissionsMixin):
+class ProductAnalyticsView(RetrieveAPIView, PermissionsMixin):
     model = Product
     queryset = model.objects.all()
-    serializer_class = ProductAnaliticsSerializer
+    serializer_class = ProductAnalyticsSerializer
 
 
 class CategoryListView(ListCreateAPIView, PermissionsMixin):
@@ -63,6 +64,12 @@ class CategoryDetailsView(RetrieveUpdateAPIView, PermissionsMixin):
     model = Category
     queryset = model.objects.all()
     serializer_class = CategorySerializer
+
+
+class CategoryAnalyticsView(RetrieveAPIView, PermissionsMixin):
+    model = Category
+    queryset = model.objects.all()
+    serializer_class = CategoryAnalyticsSerializer
 
 
 class UnitListView(ListCreateAPIView, PermissionsMixin):

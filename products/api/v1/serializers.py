@@ -7,6 +7,8 @@ from rest_framework.serializers import (
 
 from products.models import Product, Category, Unit
 
+from orders.models import OrderItem
+
 
 class ProductSerializer(ModelSerializer):
     unit_symbol = SerializerMethodField()
@@ -23,7 +25,7 @@ class ProductSerializer(ModelSerializer):
         fields = "__all__"
 
 
-class ProductAnaliticsSerializer(ModelSerializer):
+class ProductAnalyticsSerializer(ModelSerializer):
     total_sold = SerializerMethodField()
     total_revenue = SerializerMethodField()
     total_customers = SerializerMethodField()
@@ -116,6 +118,78 @@ class CategorySerializer(ModelSerializer):
     class Meta:
         model = Category
         fields = "__all__"
+
+
+class CategoryAnalyticsSerializer(ModelSerializer):
+    total_products = SerializerMethodField()
+    total_sold = SerializerMethodField()
+    total_revenue = SerializerMethodField()
+    total_customers = SerializerMethodField()
+    top_products = SerializerMethodField()
+    top_customers = SerializerMethodField()
+
+    def get_category_orderitems(self, category):
+        PAYMENT_SUCCESSFUL = 2
+        return OrderItem.objects.filter(
+            order__payment_status=PAYMENT_SUCCESSFUL,
+            product__category=category,
+        )
+
+    def get_total_products(self, category):
+        return category.product_set.count()
+
+    def get_total_sold(self, category):
+        return self.get_category_orderitems(category).aggregate(
+            Sum("quantity")
+        )["quantity__sum"]
+
+    def get_total_revenue(self, category):
+        return self.get_category_orderitems(category).aggregate(
+            Sum("revenue")
+        )["revenue__sum"]
+
+    def get_total_customers(self, category):
+        return self.get_category_orderitems(category).values(
+            "order__customer"
+        ).distinct().count()
+
+    def get_top_products(self, category):
+        return (
+            self.get_category_orderitems(category).values(
+                "product",
+                "product__name",
+                "product__unit__symbol",
+            )
+            .annotate(total_units_sold=Sum("quantity"))
+            .annotate(total_revenue=Sum("revenue"))
+            .annotate(last_purchased=Max("order__datetime"))
+            .order_by("-total_units_sold")[:5]
+        )
+
+    def get_top_customers(self, category):
+        return (
+            self.get_category_orderitems(category).values(
+                "order__customer",
+                "order__customer__first_name",
+                "order__customer__last_name",
+            )
+            .annotate(total_quantity=Sum("quantity"))
+            .annotate(total_spent=Sum("subtotal"))
+            .annotate(total_revenue=Sum("revenue"))
+            .annotate(last_purchase=Max("order__datetime"))
+            .order_by("-total_spent")[:5]
+        )
+
+    class Meta:
+        model = Category
+        fields = [
+            "total_products",
+            "total_sold",
+            "total_revenue",
+            "total_customers",
+            "top_products",
+            "top_customers",
+        ]
 
 
 class UnitSerializer(ModelSerializer):

@@ -15,9 +15,9 @@ urlpatterns = [
         name="product-details",
     ),
     path(
-        "products/<int:pk>/analitics",
-        views.ProductAnaliticsView.as_view(),
-        name="product-analitics",
+        "products/<int:pk>/analytics",
+        views.ProductAnalyticsView.as_view(),
+        name="product-analytics",
     ),
     path(
         "categories",
@@ -28,6 +28,11 @@ urlpatterns = [
         "categories/<int:pk>",
         views.CategoryDetailsView.as_view(),
         name="category-details",
+    ),
+    path(
+        "categories/<int:pk>/analytics",
+        views.CategoryAnalyticsView.as_view(),
+        name="category-analytics",
     ),
     path(
         "units",

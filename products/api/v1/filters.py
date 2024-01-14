@@ -23,16 +23,20 @@ class ProductFilterSet(filters.FilterSet):
         lookup_expr="exact",
     )
     cost_gte = filters.NumberFilter(
-        "cost", lookup_expr="gte",
+        "cost",
+        lookup_expr="gte",
     )
     cost_lte = filters.NumberFilter(
-        "cost", lookup_expr="lte",
+        "cost",
+        lookup_expr="lte",
     )
     price_gte = filters.NumberFilter(
-        "price", lookup_expr="gte",
+        "price",
+        lookup_expr="gte",
     )
     price_lte = filters.NumberFilter(
-        "price", lookup_expr="lte",
+        "price",
+        lookup_expr="lte",
     )
 
     class Meta:
