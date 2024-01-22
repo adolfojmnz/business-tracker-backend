@@ -3,10 +3,17 @@ from rest_framework.permissions import (
     SAFE_METHODS,
     IsAuthenticated,
 )
-from rest_framework.generics import ListCreateAPIView, RetrieveUpdateAPIView
+from rest_framework.generics import (
+    RetrieveAPIView,
+    ListCreateAPIView,
+    RetrieveUpdateAPIView,
+)
 
 from customers.models import Customer
-from customers.api.v1.serializers import CustomerSerializer
+from customers.api.v1.serializers import (
+    CustomerSerializer,
+    CustomerAnalyticsSerializer,
+)
 from customers.api.v1.filters import FilterBackend, CustomerFilterSet
 
 
@@ -32,3 +39,9 @@ class CustomerDetailsView(PermissionsMixin, RetrieveUpdateAPIView):
     serializer_class = CustomerSerializer
     filter_backends = [FilterBackend]
     filterset_class = CustomerFilterSet
+
+
+class CustomerAnalyticsView(PermissionsMixin, RetrieveAPIView):
+    model = Customer
+    queryset = model.objects.all()
+    serializer_class = CustomerAnalyticsSerializer

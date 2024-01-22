@@ -14,4 +14,9 @@ urlpatterns = [
         views.CustomerDetailsView.as_view(),
         name="customer-details",
     ),
+    path(
+        "customers/<int:pk>/analytics",
+        views.CustomerAnalyticsView.as_view(),
+        name="customer-analytics",
+    )
 ]
