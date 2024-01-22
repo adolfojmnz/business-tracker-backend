@@ -144,9 +144,9 @@ class CategoryAnalyticsSerializer(ModelSerializer):
         )["quantity__sum"]
 
     def get_total_revenue(self, category):
-        return self.get_category_orderitems(category).aggregate(
+        return round(self.get_category_orderitems(category).aggregate(
             Sum("revenue")
-        )["revenue__sum"]
+        )["revenue__sum"] or 0, 2)
 
     def get_total_customers(self, category):
         return self.get_category_orderitems(category).values(
